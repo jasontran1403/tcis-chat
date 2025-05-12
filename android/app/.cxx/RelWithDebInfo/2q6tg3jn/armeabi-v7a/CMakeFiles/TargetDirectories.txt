@@ -1,0 +1,2 @@
+/Users/nguyenhaitran/Desktop/tcis-chat-app/android/app/.cxx/RelWithDebInfo/2q6tg3jn/armeabi-v7a/CMakeFiles/rebuild_cache.dir
+/Users/nguyenhaitran/Desktop/tcis-chat-app/android/app/.cxx/RelWithDebInfo/2q6tg3jn/armeabi-v7a/CMakeFiles/edit_cache.dir

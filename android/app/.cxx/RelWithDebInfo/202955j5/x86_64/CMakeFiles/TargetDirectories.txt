@@ -1,0 +1,2 @@
+/Users/nguyenhaitran/Desktop/Chat-Messaging-App-Light-and-Dark-Theme/android/app/.cxx/RelWithDebInfo/202955j5/x86_64/CMakeFiles/rebuild_cache.dir
+/Users/nguyenhaitran/Desktop/Chat-Messaging-App-Light-and-Dark-Theme/android/app/.cxx/RelWithDebInfo/202955j5/x86_64/CMakeFiles/edit_cache.dir

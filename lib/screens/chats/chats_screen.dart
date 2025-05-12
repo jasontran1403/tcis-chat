@@ -105,6 +105,14 @@ class _ChatsScreenState extends State<ChatsScreen> {
     }
   }
 
+  DateTime _parseTimestamp(dynamic timestamp) {
+    try {
+      return DateTime.tryParse(timestamp?.toString() ?? '') ?? DateTime.now();
+    } catch (e) {
+      return DateTime.now();
+    }
+  }
+
   Future<void> _handleCreateNewGroup(String groupName) async {
     dynamic result = await ApiService.createGroup(groupName, widget.username!, widget.accessToken);
 
@@ -146,6 +154,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
       setState(() {
         if (isGroupMessage) {
           int index = _chats.indexWhere((chat) => chat.isGroup && chat.name == groupName);
+
           if (index != -1) {
             _chats[index] = Chat(
                 name: groupName,
@@ -157,7 +166,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 isRead: isRead,
                 isGroup: true,
                 lastSender: sender,
-                timestamp: message['timestamp']
+                timestamp: timestamp  // Use the parsed DateTime
             );
             _chats.insert(0, _chats.removeAt(index));
           } else {
@@ -173,13 +182,20 @@ class _ChatsScreenState extends State<ChatsScreen> {
                   isRead: isRead,
                   isGroup: true,
                   lastSender: sender,
-                  timestamp: message['timestamp']
+                  timestamp: timestamp  // Use the parsed DateTime
               ),
             );
           }
         } else {
           // Handle private messages
           int index = _chats.indexWhere((chat) => !chat.isGroup && chat.name == sender);
+          DateTime timestamp;
+          try {
+            timestamp = DateTime.tryParse(message['timestamp']?.toString() ?? '') ?? DateTime.now();
+          } catch (e) {
+            timestamp = DateTime.now();
+          }
+
           if (index != -1) {
             _chats[index] = Chat(
                 name: sender,
@@ -191,7 +207,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 isRead: isRead,
                 isGroup: false,
                 lastSender: sender,
-                timestamp: message['timestamp']
+                timestamp: timestamp  // Use the parsed DateTime
             );
             _chats.insert(0, _chats.removeAt(index));
           } else {
@@ -207,7 +223,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                   isRead: isRead,
                   isGroup: false,
                   lastSender: sender,
-                  timestamp: message['timestamp']
+                  timestamp: timestamp  // Use the parsed DateTime
               ),
             );
           }

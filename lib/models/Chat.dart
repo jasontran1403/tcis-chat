@@ -7,8 +7,9 @@ class Chat {
   final String? imageUrl;
   final bool isActive;
   final bool isRead;
-  final bool isGroup; // Thêm trường này để phân biệt nhóm
-  final String? lastSender; // Người gửi cuối cùng (cho nhóm)
+  final bool isGroup;
+  final String? lastSender;
+  final DateTime timestamp;
 
   Chat({
     required this.name,
@@ -20,6 +21,8 @@ class Chat {
     required this.isRead,
     this.isGroup = false,
     this.lastSender,
+    required this.timestamp,
+
   });
 
   factory Chat.fromJson(Map<String, dynamic> json) {
@@ -33,6 +36,7 @@ class Chat {
       isRead: json['isRead'] ?? false,
       isGroup: json['isGroup'] ?? false,
       lastSender: json['lastSender'],
+      timestamp: DateTime.tryParse(json['timestamp'] ?? '') ?? DateTime.now(),
     );
   }
 }

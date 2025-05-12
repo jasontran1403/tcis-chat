@@ -147,6 +147,8 @@ class _ChatsScreenState extends State<ChatsScreen> {
         if (isGroupMessage) {
           int index = _chats.indexWhere((chat) => chat.isGroup && chat.name == groupName);
           if (index != -1) {
+            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
+
             _chats[index] = Chat(
               name: groupName,
               lastMessage: content,
@@ -157,9 +159,12 @@ class _ChatsScreenState extends State<ChatsScreen> {
               isRead: isRead,
               isGroup: true,
               lastSender: sender,
+              timestamp: timestamp
             );
             _chats.insert(0, _chats.removeAt(index));
           } else {
+            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
+
             _chats.insert(
               0,
               Chat(
@@ -172,6 +177,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 isRead: isRead,
                 isGroup: true,
                 lastSender: sender,
+                timestamp: timestamp
               ),
             );
           }
@@ -179,6 +185,8 @@ class _ChatsScreenState extends State<ChatsScreen> {
           // Xử lý tin nhắn cá nhân như cũ
           int index = _chats.indexWhere((chat) => !chat.isGroup && chat.name == sender);
           if (index != -1) {
+            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
+
             _chats[index] = Chat(
               name: sender,
               lastMessage: content,
@@ -187,9 +195,12 @@ class _ChatsScreenState extends State<ChatsScreen> {
               imageUrl: "",
               isActive: true,
               isRead: isRead,
+              timestamp: timestamp
             );
             _chats.insert(0, _chats.removeAt(index));
           } else {
+            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
+
             _chats.insert(
               0,
               Chat(
@@ -200,6 +211,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 imageUrl: "",
                 isActive: true,
                 isRead: isRead,
+                timestamp: timestamp
               ),
             );
           }
@@ -265,6 +277,8 @@ class _ChatsScreenState extends State<ChatsScreen> {
             final receiver = message['receiver'] as String;
             // Determine the chat name (use the other user, not the current user)
             final chatName = sender == widget.username ? receiver : sender;
+            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
+
             return Chat(
               name: chatName,
               lastMessage: message['content'] ?? '',
@@ -275,6 +289,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
               isRead: message['read'] ?? false,
               isGroup: false,
               lastSender: sender,
+              timestamp: timestamp
             );
           }).toList();
         }
@@ -289,13 +304,14 @@ class _ChatsScreenState extends State<ChatsScreen> {
             String? lastSender;
             bool isRead = false;
 
-            // Lấy tin nhắn mới nhất từ messages (nếu có)
+            DateTime timestamp = DateTime.now();
             if (messages.isNotEmpty) {
               final latestGroupMessage = messages.last;
               lastMessage = latestGroupMessage['content'] ?? 'Chưa có tin nhắn';
               time = _formatRelativeTime(DateTime.parse(latestGroupMessage['timestamp'] ?? DateTime.now().toString()));
               lastSender = latestGroupMessage['sender'];
               isRead = latestGroupMessage['read'] ?? false;
+              timestamp = DateTime.parse(latestGroupMessage['timestamp'] ?? DateTime.now().toString());
             }
 
             return Chat(
@@ -308,13 +324,14 @@ class _ChatsScreenState extends State<ChatsScreen> {
               isRead: isRead,
               isGroup: true,
               lastSender: lastSender,
+              timestamp: timestamp,
             );
           }).toList();
         }
 
         // Kết hợp cả 2 danh sách và sắp xếp theo thời gian
         _chats = [...personalChats, ...groupChats];
-        _chats.sort((a, b) => b.time.compareTo(a.time));
+        _chats.sort((a, b) => b.timestamp.compareTo(a.timestamp));
       });
     } catch (e) {
       setState(() {

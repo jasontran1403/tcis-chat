@@ -75,7 +75,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
     _messageSubscription = messageStream.listen((message) {
       try {
         final sender = message['sender'];
-        final isGroupMessage = message['isGroup'] ?? false;
+        bool isGroupMessage = false;
+        final recipient = message['recipient'] ?? '';
+
+        if (recipient.startsWith("Group")) {  // Thay contains bằng startsWith
+          isGroupMessage = true;
+        }
         final groupName = message['groupName'] ?? message['recipient'];
 
         bool isCurrentConversation;

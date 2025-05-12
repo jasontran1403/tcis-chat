@@ -7,7 +7,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-		<string>Chat</string>
+		<string>TCIS Chat</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
@@ -26,6 +26,14 @@
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
+		
+		<key>NSCameraUsageDescription</key>
+		<string>This app needs access to the camera</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>This app needs access to your photo library</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>This app needs access to your microphone to record video</string>
+		
 		<key>UIApplicationSupportsIndirectInputEvents</key>
 		<true/>
 		<key>UILaunchStoryboardName</key>

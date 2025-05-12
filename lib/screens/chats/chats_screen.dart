@@ -133,41 +133,21 @@ class _ChatsScreenState extends State<ChatsScreen> {
       bool isGroupMessage = false;
       final recipient = message['recipient'] ?? '';
 
-      if (recipient.startsWith("Group")) {  // Thay contains bằng startsWith
+      if (recipient.startsWith("Group")) {
         isGroupMessage = true;
       }
 
       final sender = message['sender'];
       final content = message['content'];
       final timestamp = DateTime.parse(message['timestamp']);
-      final isRead = message['read'] ?? false;  // Sửa 'isRead' thành 'read'
-      final groupName = message['recipient'];    // Sử dụng recipient làm groupName
+      final isRead = message['read'] ?? false;
+      final groupName = message['recipient'];
 
       setState(() {
         if (isGroupMessage) {
           int index = _chats.indexWhere((chat) => chat.isGroup && chat.name == groupName);
           if (index != -1) {
-            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
-
             _chats[index] = Chat(
-              name: groupName,
-              lastMessage: content,
-              image: "assets/images/group.png",
-              time: _formatRelativeTime(timestamp),
-              imageUrl: "",
-              isActive: true,
-              isRead: isRead,
-              isGroup: true,
-              lastSender: sender,
-              timestamp: timestamp
-            );
-            _chats.insert(0, _chats.removeAt(index));
-          } else {
-            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
-
-            _chats.insert(
-              0,
-              Chat(
                 name: groupName,
                 lastMessage: content,
                 image: "assets/images/group.png",
@@ -177,33 +157,31 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 isRead: isRead,
                 isGroup: true,
                 lastSender: sender,
-                timestamp: timestamp
+                timestamp: message['timestamp']
+            );
+            _chats.insert(0, _chats.removeAt(index));
+          } else {
+            _chats.insert(
+              0,
+              Chat(
+                  name: groupName,
+                  lastMessage: content,
+                  image: "assets/images/group.png",
+                  time: _formatRelativeTime(timestamp),
+                  imageUrl: "",
+                  isActive: true,
+                  isRead: isRead,
+                  isGroup: true,
+                  lastSender: sender,
+                  timestamp: message['timestamp']
               ),
             );
           }
         } else {
-          // Xử lý tin nhắn cá nhân như cũ
+          // Handle private messages
           int index = _chats.indexWhere((chat) => !chat.isGroup && chat.name == sender);
           if (index != -1) {
-            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
-
             _chats[index] = Chat(
-              name: sender,
-              lastMessage: content,
-              image: "assets/images/user.png",
-              time: _formatRelativeTime(timestamp),
-              imageUrl: "",
-              isActive: true,
-              isRead: isRead,
-              timestamp: timestamp
-            );
-            _chats.insert(0, _chats.removeAt(index));
-          } else {
-            final timestamp = DateTime.parse(message['timestamp'] ?? DateTime.now().toString());
-
-            _chats.insert(
-              0,
-              Chat(
                 name: sender,
                 lastMessage: content,
                 image: "assets/images/user.png",
@@ -211,7 +189,25 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 imageUrl: "",
                 isActive: true,
                 isRead: isRead,
-                timestamp: timestamp
+                isGroup: false,
+                lastSender: sender,
+                timestamp: message['timestamp']
+            );
+            _chats.insert(0, _chats.removeAt(index));
+          } else {
+            _chats.insert(
+              0,
+              Chat(
+                  name: sender,
+                  lastMessage: content,
+                  image: "assets/images/user.png",
+                  time: _formatRelativeTime(timestamp),
+                  imageUrl: "",
+                  isActive: true,
+                  isRead: isRead,
+                  isGroup: false,
+                  lastSender: sender,
+                  timestamp: message['timestamp']
               ),
             );
           }
